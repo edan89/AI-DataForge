@@ -101,7 +101,8 @@ def _build_iban_recognizer():
 
 def _build_finnish_ssn_recognizer():
     """Custom recognizer for Finnish personal identity codes (henkilötunnus)."""
-    if not PRESIDIO_AVAILABLE: return None
+    if not PRESIDIO_AVAILABLE:
+        return None
     fi_ssn_pattern = Pattern(
         name="finnish_ssn_pattern",
         regex=r"\b\d{6}[-+A]\d{3}[A-Z0-9]\b",

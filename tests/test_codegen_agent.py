@@ -121,7 +121,7 @@ spark.stop()'''
 
         agent = PySparkCodeGenAgent(api_key="test-key")
         df = pd.DataFrame({"col1": [1, 2], "col2": ["a", "b"]})
-        result = agent.generate("Process this data", df=df)
+        agent.generate("Process this data", df=df)
 
         # Verify LLM was called with context
         call_args = mock_llm.invoke.call_args
