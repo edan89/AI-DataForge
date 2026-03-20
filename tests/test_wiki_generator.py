@@ -9,7 +9,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 import pandas as pd
 
-from agents.wiki_generator import WikiGenerator, DataWiki, ColumnProfile
+from agents.wiki_generator import WikiGenerator, DataWiki
 
 
 # ---------------------------------------------------------------------------

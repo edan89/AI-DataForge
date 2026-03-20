@@ -11,7 +11,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 import streamlit as st
 import pandas as pd
-from io import StringIO
 
 from core.pii_scrubber import PIIScrubber, MaskMode
 from ui.components.styles import THEME_CSS, SIDEBAR_LOGO

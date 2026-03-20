@@ -8,7 +8,7 @@ including edge cases and custom banking recognizers.
 import pytest
 import pandas as pd
 
-from core.pii_scrubber import PIIScrubber, MaskMode, PIIReport
+from core.pii_scrubber import PIIScrubber, MaskMode
 
 
 # ---------------------------------------------------------------------------

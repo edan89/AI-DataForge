@@ -7,7 +7,6 @@ valid, optimized PySpark scripts. Uses Groq API (Llama 3) for inference.
 Knowledge Proved: Agent-based AI solutions, PySpark, and LLM orchestration.
 """
 
-import json
 import os
 from dataclasses import dataclass, field
 from typing import Optional
@@ -49,9 +48,9 @@ class PySparkCodeGenAgent:
     Uses Groq API with Llama 3 models for fast, free inference.
 
     Example:
-        agent = PySparkCodeGenAgent(api_key="your-groq-key")
-        result = agent.generate("Clean this insurance data and calculate monthly claim averages")
-        print(result.code)
+        agent = PySparkCodeGenAgent(api_key=os.getenv("GROQ_API_KEY"))
+        code_result = agent.generate("Clean this insurance data and calculate monthly claim averages")
+        print(code_result.code)
     """
 
     DEFAULT_MODEL = "llama-3.3-70b-versatile"

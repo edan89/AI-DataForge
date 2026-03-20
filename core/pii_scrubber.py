@@ -84,7 +84,8 @@ class PIIReport:
 
 def _build_iban_recognizer():
     """Custom recognizer for International Bank Account Numbers (IBAN)."""
-    if not PRESIDIO_AVAILABLE: return None
+    if not PRESIDIO_AVAILABLE: 
+        return None
     iban_pattern = Pattern(
         name="iban_pattern",
         regex=r"\b[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}\b",
