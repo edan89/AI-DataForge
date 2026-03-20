@@ -1,0 +1,130 @@
+name: AI-DataForge Guardrail
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: 🔍 Python Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Ruff
+      run: pip install ruff
+
+    - name: Run Ruff Linter
+      run: ruff check . --output-format=github
+
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python -m spacy download en_core_web_lg
+
+    - name: Run Pytest
+      run: pytest tests/ -v --tb=short
+
+  security-scan:
+    name: 🔒 PII & Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Scan for hardcoded secrets
+      run: |
+        echo "🔍 Scanning for hardcoded secrets..."
+        FOUND=0
+
+        # Check for common secret patterns in Python files
+        if grep -rn --include="*.py" -E "(API_KEY|api_key|secret_key|password|token)\s*=\s*['\"][^'\"]+['\"]" . --exclude-dir=venv --exclude-dir=.git --exclude-dir=tests; then
+          echo "⚠️ WARNING: Possible hardcoded secrets found!"
+          FOUND=1
+        fi
+
+        # Check for AWS keys
+        if grep -rn --include="*.py" -E "AKIA[0-9A-Z]{16}" . --exclude-dir=venv --exclude-dir=.git; then
+          echo "⚠️ WARNING: Possible AWS key found!"
+          FOUND=1
+        fi
+
+        # Check for Bearer tokens
+        if grep -rn --include="*.py" -E "Bearer\s+[A-Za-z0-9\-._~+/]+" . --exclude-dir=venv --exclude-dir=.git --exclude-dir=tests; then
+          echo "⚠️ WARNING: Possible Bearer token found!"
+          FOUND=1
+        fi
+
+        # Check for Groq/OpenAI keys
+        if grep -rn --include="*.py" -E "(sk-|gsk_)[A-Za-z0-9]{20,}" . --exclude-dir=venv --exclude-dir=.git --exclude-dir=tests; then
+          echo "⚠️ WARNING: Possible API key found!"
+          FOUND=1
+        fi
+
+        if [ $FOUND -eq 0 ]; then
+          echo "✅ No hardcoded secrets detected."
+        else
+          echo "❌ SECURITY SCAN FAILED — Remove hardcoded secrets and use .env"
+          exit 1
+        fi
+
+    - name: Scan for PII patterns in data files
+      run: |
+        echo "🔍 Scanning for PII in committed files..."
+        FOUND=0
+
+        # Check for email addresses in non-test data files
+        if grep -rn -E "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" data/ 2>/dev/null; then
+          echo "⚠️ WARNING: Email addresses found in data/ folder!"
+          echo "Note: This may be intentional for sample/test data. Review manually."
+        fi
+
+        # Check for SSN patterns
+        if grep -rn -E "\b\d{3}-\d{2}-\d{4}\b" data/ 2>/dev/null; then
+          echo "⚠️ WARNING: Possible SSN patterns found in data/ folder!"
+        fi
+
+        # Check for credit card patterns
+        if grep -rn -E "\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b" data/ 2>/dev/null; then
+          echo "⚠️ WARNING: Possible credit card numbers found in data/ folder!"
+          FOUND=1
+        fi
+
+        if [ $FOUND -eq 0 ]; then
+          echo "✅ PII scan passed (review warnings above if any)."
+        else
+          echo "❌ PII SCAN FAILED — Remove or mask sensitive data"
+          exit 1
+        fi
+
+    - name: Check .env not committed
+      run: |
+        if [ -f ".env" ]; then
+          echo "❌ CRITICAL: .env file is committed to the repository!"
+          exit 1
+        else
+          echo "✅ .env is not committed."
+        fi

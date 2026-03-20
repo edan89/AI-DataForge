@@ -1,0 +1,27 @@
+# Secrets & credentials
+.env
+*.pem
+*.key
+credentials.json
+token.json
+secrets/
+
+# Environment
+venv/
+__pycache__/
+*.pyc
+node_modules/
+
+# Workbench
+.tmp/
+.pytest_cache/
+.gemini/
+
+# Brain notes (exclude all except teaching & gemini)
+.brain/*
+!.brain/teaching.md
+!.brain/gemini.md
+
+# OS
+.DS_Store
+Thumbs.db
