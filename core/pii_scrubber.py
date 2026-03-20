@@ -154,24 +154,20 @@ class PIIScrubber:
             print("PIIScrubber running in MOCK mode due to missing Presidio packages.")
             return
 
-        # Initialize Presidio NLP Engine (using Stanza to bypass spaCy/Pydantic issues on Python 3.14)
+        # Initialize Presidio Auto-Analyzer
         try:
-            configuration = {
-                "nlp_engine_name": "stanza",
-                "models": [{"lang_code": "en", "model_name": "en"}]
-            }
-            provider = NlpEngineProvider(nlp_configuration=configuration)
-            nlp_engine = provider.create_engine()
-            self.analyzer = AnalyzerEngine(nlp_engine=nlp_engine, supported_languages=[self.language])
+            self.analyzer = AnalyzerEngine(supported_languages=[self.language])
         except Exception as e:
-            print(f"Warning: Failed to load Stanza NLP engine ({e}). Falling back to default.")
-            self.analyzer = AnalyzerEngine()
+            print(f"Warning: Failed to load NLP engine ({e}). Falling back to MOCK mode.")
+            self.analyzer = None
+            self.is_mock = True
 
         self.anonymizer = AnonymizerEngine()
 
         # Register custom recognizers
-        self.analyzer.registry.add_recognizer(_build_iban_recognizer())
-        self.analyzer.registry.add_recognizer(_build_finnish_ssn_recognizer())
+        if self.analyzer:
+            self.analyzer.registry.add_recognizer(_build_iban_recognizer())
+            self.analyzer.registry.add_recognizer(_build_finnish_ssn_recognizer())
 
     # ------------------------------------------------------------------
     # Text-Level Operations
