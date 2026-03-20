@@ -17,7 +17,7 @@ THEME_CSS = """
     --bg-card: #1A1D23;
     --bg-card-hover: #22252B;
     --text-primary: #FAFAFA;
-    --text-secondary: #B0B3B8;
+    --text-secondary: #D1D5DB;
     --border: #2D3139;
     --success: #00D4AA;
     --warning: #FFB84D;
@@ -31,6 +31,11 @@ THEME_CSS = """
 /* ============ GLOBAL ============ */
 .stApp {
     background-color: var(--bg-dark);
+}
+
+/* ============ HEADINGS ============ */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
 }
 
 /* ============ SIDEBAR ============ */
@@ -182,6 +187,17 @@ hr {
     padding: 24px;
     margin: 12px 0;
     transition: all 0.3s ease;
+}
+
+.module-card h3 {
+    color: var(--text-primary) !important;
+    margin-top: 12px !important;
+    margin-bottom: 8px !important;
+}
+
+.module-card p {
+    color: var(--text-secondary) !important;
+    line-height: 1.6 !important;
 }
 
 .module-card:hover {

@@ -76,8 +76,8 @@ with col1:
         """
         <div class="module-card">
             <span class="badge badge-security">Security</span>
-            <h3 style="margin-top: 12px;">🔒 PII Scrubber</h3>
-            <p style="color: #B0B3B8;">
+            <h3>🔒 PII Scrubber</h3>
+            <p>
                 Banking-grade PII detection & masking powered by Microsoft Presidio.
                 Detects Names, Emails, Phone Numbers, Credit Cards, IBANs, and SSNs.
             </p>
@@ -90,8 +90,8 @@ with col1:
         """
         <div class="module-card">
             <span class="badge badge-docs">Documentation</span>
-            <h3 style="margin-top: 12px;">📚 Data-Wiki Generator</h3>
-            <p style="color: #B0B3B8;">
+            <h3>📚 Data-Wiki Generator</h3>
+            <p>
                 Automatically generates professional Markdown data dictionaries
                 with column profiles, statistics, and LLM-powered descriptions.
             </p>
@@ -105,8 +105,8 @@ with col2:
         """
         <div class="module-card">
             <span class="badge badge-ai">AI Agent</span>
-            <h3 style="margin-top: 12px;">⚡ PySpark Code-Gen</h3>
-            <p style="color: #B0B3B8;">
+            <h3>⚡ PySpark Code-Gen</h3>
+            <p>
                 LangChain agent that generates optimized PySpark ETL scripts
                 from natural language, with built-in code validation.
             </p>
@@ -119,8 +119,8 @@ with col2:
         """
         <div class="module-card">
             <span class="badge badge-devops">DevOps</span>
-            <h3 style="margin-top: 12px;">🛡️ CI/CD Guardrail</h3>
-            <p style="color: #B0B3B8;">
+            <h3>🛡️ CI/CD Guardrail</h3>
+            <p>
                 GitHub Action that lints code, runs tests, and performs
                 security scans for PII leaks on every push.
             </p>
